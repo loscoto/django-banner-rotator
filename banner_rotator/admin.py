@@ -3,7 +3,7 @@ import logging
 from django.contrib import admin
 from django import forms
 
-from banner_rotator.models import Campaign, Banner
+from banner_rotator.models import Banner, Region
 
 class BannerForm(forms.ModelForm):
     """
@@ -34,10 +34,10 @@ class BannerAdminInline(admin.StackedInline):
     form = BannerForm
     extra = 0
     readonly_fields = ['impressions',]
-    fields = ['is_active', 'name', 'url', 'image', 'weight', 'clicks', 'impressions']
+    #fields = ['is_active', 'name', 'url', 'image', 'weight', 'clicks', 'impressions']
 
 
-class CampaignAdmin(admin.ModelAdmin):
+class RegionAdmin(admin.ModelAdmin):
     inlines = [BannerAdminInline]
 
-admin.site.register(Campaign, CampaignAdmin)
+admin.site.register(Region, RegionAdmin)

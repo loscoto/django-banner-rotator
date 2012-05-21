@@ -1,0 +1,5 @@
+{% if banner %}
+<a href="{% url banner_click banner.region.id banner.id %}" rel="nofollow" title="{{ banner.name }}">
+    <img src="{{ banner.image.url }}" alt="{{ banner.name }}" width="{{ banner.width}}" height="{{ banner.height }}" />
+</a>
+{% endif %}

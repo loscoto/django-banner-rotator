@@ -7,13 +7,13 @@ register = template.Library()
 
 class BannerNode(template.Node):
 
-    def __init__(self, varname='banner', campaign_id=None):
-        self.varname, self.campaign_id = varname, campaign_id
+    def __init__(self, varname='banner', region_key=None):
+        self.varname, self.region_key = varname, region_key
 
     def render(self, context):
         kwargs = {}
-        if self.campaign_id:
-            kwargs['campaign'] = self.campaign_id
+        if self.region_key:
+            kwargs['region__key'] = self.region_key
         try:
             banner = Banner.objects.biased_choice(**kwargs)
         except Banner.DoesNotExist:
@@ -28,20 +28,16 @@ class BannerNode(template.Node):
 @register.tag
 def banner(parser, token):
     """
-    Use: {% banner 1 as banner %}
+    Use: {% banner left as banner %}
 
-    Pick a banner using the biased / weighting manager, with an optional campaign number
+    Pick a banner using the biased / weighting manager, with an region key
     """
     bits = token.contents.split()
 
-    if len(bits) not in [3,4]:
-        raise template.TemplateSyntaxError, "pick_banner tag takes three of four arguments"
-    
-    if bits[2] == 'as':
-        varname = bits[3]
-        campaign = int(bits[1])
-    else:
-        varname = bits[2]
-        campaign = None
+    if len(bits) != 4:
+        raise template.TemplateSyntaxError, "pick_banner tag takes four arguments"
 
-    return BannerNode(varname, campaign)
+    region = bits[1]
+    varname = bits[3]
+
+    return BannerNode(varname, region)
